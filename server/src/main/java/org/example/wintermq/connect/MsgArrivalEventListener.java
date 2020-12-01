@@ -34,6 +34,7 @@ public class MsgArrivalEventListener {
            data.put("topic",event.getTopic());
            data.put("msg",event.getMsg());
 
+           System.out.println("给订阅者发送消息");
            try {
                HttpUtil.connect(consumeUrl).setMethod("POST").setPostData(data).execute();
            } catch (IOException e) {

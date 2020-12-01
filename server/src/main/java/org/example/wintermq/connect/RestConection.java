@@ -1,5 +1,7 @@
 package org.example.wintermq.connect;
 
+
+
 import org.example.wintermq.constant.UriConstant;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,7 @@ import java.util.List;
 public class RestConection {
 
 
+
     @Resource
     ApplicationContext applicationContext;
 
@@ -35,12 +38,15 @@ public class RestConection {
     @RequestMapping(value = UriConstant.SUBSCRIBE_URI,method = {RequestMethod.POST})
     public String  subscribe(HttpServletRequest request,String topic){
 
+
         String host =request.getRemoteHost();
-        int port=request.getRemotePort();
+       // int port=request.getRemotePort();
+        int port=8088;
         ClientInfo clientInfo=new ClientInfo(host,port);
        List<ClientInfo> clientInfos= ClientHolder.get(topic);
        clientInfos.add(clientInfo);
 
+        System.out.println(host+"订阅消息"+topic);
        return "success";
     }
 

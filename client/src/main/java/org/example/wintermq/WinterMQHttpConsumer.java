@@ -1,8 +1,8 @@
 package org.example.wintermq;
 
 import org.example.wintermq.constant.UriConstant;
+import org.example.wintermq.http.HttpMsqContainer;
 import org.example.wintermq.util.HttpUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -21,16 +21,17 @@ public class WinterMQHttpConsumer implements WinterMQConsumer{
 
     private String topic;
 
-    @Autowired
+  //  @Autowired
     WinterMQHttpConsumerContainer container;
-    /**
-     * 消费者注册
-     */
+    HttpMsqContainer msqContainer;
+
+    /**新建消费者对象的时候 启动一个监听线程*/
     public WinterMQHttpConsumer(String ip,int port,String topic)  {
 
         this.WinterMQHttpServerIp=ip;
         this.WinterMQHttpServerPort=port;
         this.topic=topic;
+        //注册消费者
         String consumerRegURL="Http://"+ip+":"+port+"/"+ UriConstant.SUBSCRIBE_URI;
         Map<String,Object> data=new HashMap<>();
         data.put("topic",topic);
@@ -40,11 +41,12 @@ public class WinterMQHttpConsumer implements WinterMQConsumer{
             //TODO
             e.printStackTrace();
         }
+        msqContainer=HttpMsqContainer.getInstance();
     }
 
     /**接受消息*/
     public String consumeMsg(){
-        return container.getMsg(topic);
+        return msqContainer.getMsg(topic);
     }
 
 
