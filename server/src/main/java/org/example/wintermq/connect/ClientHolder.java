@@ -22,4 +22,9 @@ public class ClientHolder {
         List<ClientInfo> clientInfos=holder.get(topic);
         return clientInfos;
     }
+
+    public static  void addTopicList(String topic,List<ClientInfo> list){
+        holder.put(topic,list);
+        return ;
+    }
 }

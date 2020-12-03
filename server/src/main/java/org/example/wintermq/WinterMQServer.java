@@ -6,10 +6,10 @@ import org.springframework.scheduling.annotation.EnableAsync;
 
 @SpringBootApplication
 @EnableAsync
-public class App
+public class WinterMQServer
 {
     public static void main(String[] args) {
-        SpringApplication.run(App.class, args);
+        SpringApplication.run(WinterMQServer.class, args);
     }
 }
 

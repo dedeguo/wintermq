@@ -1,7 +1,9 @@
 package org.example.wintermq;
 
 
+import com.alibaba.fastjson.JSON;
 import org.example.wintermq.constant.UriConstant;
+import org.example.wintermq.util.HttpClient;
 import org.example.wintermq.util.HttpUtil;
 
 import java.io.IOException;
@@ -28,11 +30,9 @@ public class WinterMQHttpProducer implements WinterMQProducer{
         Map<String,Object> data=new HashMap<>();
         data.put("topic",topic);
         data.put("msg",msg);
-        try {
-            HttpUtil.connect(consumerRegURL).setMethod("POST").setPostData(data).execute();
-        } catch (IOException e) {
-            //TODO
-            e.printStackTrace();
-        }
+        String jdata= JSON.toJSONString(data);
+
+        HttpClient.doPost(consumerRegURL,jdata);
+
     }
 }

@@ -1,7 +1,9 @@
 package org.example.wintermq;
 
+import com.alibaba.fastjson.JSON;
 import org.example.wintermq.constant.UriConstant;
-import org.example.wintermq.http.HttpMsqContainer;
+import org.example.wintermq.http.LocalServerHolder;
+import org.example.wintermq.util.HttpClient;
 import org.example.wintermq.util.HttpUtil;
 
 import java.io.IOException;
@@ -23,7 +25,7 @@ public class WinterMQHttpConsumer implements WinterMQConsumer{
 
   //  @Autowired
     WinterMQHttpConsumerContainer container;
-    HttpMsqContainer msqContainer;
+    LocalServerHolder msqContainer;
 
     /**新建消费者对象的时候 启动一个监听线程*/
     public WinterMQHttpConsumer(String ip,int port,String topic)  {
@@ -32,16 +34,14 @@ public class WinterMQHttpConsumer implements WinterMQConsumer{
         this.WinterMQHttpServerPort=port;
         this.topic=topic;
         //注册消费者
-        String consumerRegURL="Http://"+ip+":"+port+"/"+ UriConstant.SUBSCRIBE_URI;
+        String consumerRegURL="Http://"+ip+":"+port+"/"+ UriConstant.SUBSCRIBE_URI+"?topic="+topic;
         Map<String,Object> data=new HashMap<>();
         data.put("topic",topic);
-        try {
-            HttpUtil.connect(consumerRegURL).setMethod("POST").setPostData(data).execute();
-        } catch (IOException e) {
-            //TODO
-            e.printStackTrace();
-        }
-        msqContainer=HttpMsqContainer.getInstance();
+        String jdata= JSON.toJSONString(data);
+
+        HttpClient.doPost(consumerRegURL,jdata);
+
+        msqContainer= LocalServerHolder.getInstance();
     }
 
     /**接受消息*/
